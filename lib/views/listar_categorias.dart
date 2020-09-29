@@ -36,9 +36,18 @@ class _CategoriasState extends State<Categorias> {
         child: ListView(
           children: [
             UserAccountsDrawerHeader(
-                accountName: Text(
-                    Provider.of<UserProvider>(context, listen: false)
-                        .username),
+              
+                accountName: Column(
+                  children: [
+                    Text(
+                        Provider.of<UserProvider>(context, listen: false)
+                            .username),
+                            Text(
+                        Provider.of<UserProvider>(context, listen: false)
+                            .first_name),
+                            
+                  ],
+                ),
                 accountEmail: Text(
                     Provider.of<UserProvider>(context, listen: false).email)),
             ListTile(

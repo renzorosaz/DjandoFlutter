@@ -52,11 +52,10 @@ class HttpHelper {
     print(response.body);
   }
 
-  Future consultarUsuario(String token) async {
+   Future consultarUsuario(String token) async {
     var response = await http.get(urlBase + "clienteRetrieve/",
-        headers: {"Authorization": "JWT" + token});
+        headers: {"Authorization": "JWT " + token});
     print(response.body);
-
     if (response.statusCode == 200) {
       var json = jsonDecode(response.body);
       var prefs = await SharedPreferences.getInstance();
@@ -65,8 +64,6 @@ class HttpHelper {
       prefs.setString("first_name", json["first_name"]);
       prefs.setString("last_name", json["last_name"]);
       prefs.setString("dni", json["dni"]);
-    } else {
-      return false;
     }
   }
 }
