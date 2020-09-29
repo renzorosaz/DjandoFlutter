@@ -6,6 +6,7 @@ import 'package:miloficiosapp/providers/user_provider.dart';
 import 'package:miloficiosapp/utils/http_helper.dart';
 import 'package:miloficiosapp/views/listar_subcategorias.dart';
 import 'package:provider/provider.dart';
+
 class Categorias extends StatefulWidget {
   @override
   _CategoriasState createState() => _CategoriasState();
@@ -13,6 +14,17 @@ class Categorias extends StatefulWidget {
 
 class _CategoriasState extends State<Categorias> {
   int bannerActual = 0;
+
+  @override
+  void initState() {
+    super.initState();
+    consultarInfoUsuario();
+  }
+
+  void consultarInfoUsuario() async {
+    await HttpHelper().consultarUsuario(Provider.of<UserProvider>(context, listen: false).token);
+    Provider.of<UserProvider>(context, listen: false).fetchUserData();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -24,10 +36,11 @@ class _CategoriasState extends State<Categorias> {
         child: ListView(
           children: [
             UserAccountsDrawerHeader(
-              currentAccountPicture: CircleAvatar(),
-              accountName: Text("Renzo"),
-               accountEmail: Text("renzo.r@gmail.com")
-              ),
+                accountName: Text(
+                    Provider.of<UserProvider>(context, listen: false)
+                        .username),
+                accountEmail: Text(
+                    Provider.of<UserProvider>(context, listen: false).email)),
             ListTile(
               title: Text("Cerrar Sesión"),
               onTap: () {
@@ -105,7 +118,7 @@ class _BannerPublicitarioViewState extends State<BannerPublicitarioView> {
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
-      future: HttpHelper().fetchBannerPublicitarios(),
+      future: HttpHelper().fetchBannersPublicitarios(),
       builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
         if (snapshot.hasData) {
           List<BannerPublicitario> banners = snapshot.data;
@@ -134,7 +147,7 @@ class _BannerPublicitarioViewState extends State<BannerPublicitarioView> {
                 children: banners.map((img) {
                   int indTemp = banners.indexOf(img);
                   return Container(
-                    padding: EdgeInsets.all(8),
+                    margin: EdgeInsets.all(8),
                     height: 8,
                     width: 8,
                     decoration: BoxDecoration(

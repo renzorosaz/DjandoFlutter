@@ -33,7 +33,7 @@ class _RegisterPageState extends State<RegisterPage> {
         controllerNombre.text,
         controllerApellido.text,
         controllerDNI.text);
-    if (exito) {
+    if (exito == true) {
       String token = await HttpHelper()
           .iniciarSesion(controllerUsuario.text, controllerPassword.text);
       if (token.length > 0) {

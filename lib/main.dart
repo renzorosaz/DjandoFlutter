@@ -21,15 +21,18 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
+
     if (Provider.of<UserProvider>(context, listen: false).token == null)
       Provider.of<UserProvider>(context, listen: false).fetchUserData();
+
     return MaterialApp(
       title: 'Flutter Demo',
       theme: ThemeData(
         primarySwatch: Colors.blue,
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-      home: ( Provider.of<UserProvider>(context, listen: false).token == null && Provider.of<UserProvider>(context).token.length > 0)
+      home: ( Provider.of<UserProvider>(context).token !=null && 
+              Provider.of<UserProvider>(context).token.length > 0)
           ? Categorias()
           : Login(),
     );

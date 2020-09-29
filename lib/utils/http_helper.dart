@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:miloficiosapp/models/banner.dart';
 import 'package:miloficiosapp/models/categoria.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class HttpHelper {
   String urlBase = "http://192.168.1.3:8000/API/";
@@ -16,7 +17,7 @@ class HttpHelper {
     return categoriasJson.map((e) => Categoria.fromJson(e)).toList();
   }
 
-  Future<List<BannerPublicitario>> fetchBannerPublicitarios() async {
+  Future<List<BannerPublicitario>> fetchBannersPublicitarios() async {
     var response = await http.get(urlBase + "bannerspublicitarios/");
     List categoriasJson = jsonDecode(response.body);
 
@@ -51,12 +52,19 @@ class HttpHelper {
     print(response.body);
   }
 
-  Future<bool> consultarUsuario() async {
-    var response = await http.get(urlBase + "/clienteRetrieve/11/");
+  Future consultarUsuario(String token) async {
+    var response = await http.get(urlBase + "clienteRetrieve/",
+        headers: {"Authorization": "JWT" + token});
     print(response.body);
 
     if (response.statusCode == 200) {
-      return true;
+      var json = jsonDecode(response.body);
+      var prefs = await SharedPreferences.getInstance();
+      prefs.setString("username", json["username"]);
+      prefs.setString("email", json["email"]);
+      prefs.setString("first_name", json["first_name"]);
+      prefs.setString("last_name", json["last_name"]);
+      prefs.setString("dni", json["dni"]);
     } else {
       return false;
     }
